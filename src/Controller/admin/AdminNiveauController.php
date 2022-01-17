@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\NiveauRepository;
+use App\Repository\FormationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Niveau;
 
@@ -29,15 +30,23 @@ class AdminNiveauController extends AbstractController{
      * @var NiveauRepository
      */
     private $repository;
+    
+    /**
+     *
+     * @var FormationRepository
+     */
+    private $repositoryFormation;
+    
 
     /**
      * 
      * @param NiveauRepository $repository
      * @param EntityManagerInterface $om
      */
-    function __construct(NiveauRepository $repository, EntityManagerInterface $om) {
+    function __construct(NiveauRepository $repository, EntityManagerInterface $om, FormationRepository $repositoryFormation) {
         $this->repository = $repository;
         $this->om = $om;
+        $this->repositoryFormation = $repositoryFormation;
     }
     
     /**
@@ -54,20 +63,25 @@ class AdminNiveauController extends AbstractController{
     /**
      * @Route("/admin/niveau/suppr/{id}", name="admin.niveau.suppr")
      * @param Niveau $niveau
+     * @param integer $id
      * @return Response
      */
-    public function suppr(Niveau $niveau): Response{
-        $this->om->remove($niveau);
-        $this->om->flush();
+    public function suppr(Niveau $niveau, $id): Response{    
+        $formation = $this->repositoryFormation->findNiveauByContainValue("niveau_id", $id);
+        
+        if(count($formation) == 0){
+            $this->om->remove($niveau);
+            $this->om->flush();
+        }        
         return $this->redirectToRoute('admin.niveaux');
     }
     
     /**
-     * @Route("/admin/niveau/ajout", name="admin.niveau.ajout")
+     * @Route("/admin/niveauN/ajout", name="admin.niveauN.ajout")
      * @param Request $request
      * @return Response
      */
-    public function ajout(Request $request): Response{
+    public function ajout(Request $request): Response {
         $nomNiveau = $request->get("nom");
         $niveau = new Niveau();
         $niveau->setDifficulter($nomNiveau);
@@ -75,6 +89,6 @@ class AdminNiveauController extends AbstractController{
         $this->om->persist($niveau);
         $this->om->flush();
         return $this->redirectToRoute('admin.niveaux');
-
+        
     }
 }

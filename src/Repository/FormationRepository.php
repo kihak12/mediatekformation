@@ -55,7 +55,34 @@ class FormationRepository extends ServiceEntityRepository
                     ->getResult();            
         }
     }
-        
+    
+    
+    /**
+     * Enregistrements dont un champ contientune valeur
+     * ou tous les enregistrements si la valeur est vide
+     * @param type $champ
+     * @param type $valeur
+     * @return Formation[]
+     */
+    public function findNiveauByContainValue($champ, $valeur): array{
+        if($valeur==""){
+            return $this->createQueryBuilder('f')
+                    ->orderBy('f.'.$champ, 'ASC')
+                    ->getQuery()
+                    ->getResult();
+        }else{
+            return $this->createQueryBuilder('f')
+                    ->where('f.'.$champ.' LIKE :valeur')
+                    ->setParameter('valeur', $valeur)
+                    ->orderBy('f.publishedAt', 'DESC')
+                    ->setParameter('valeur', '%'.$valeur.'%')
+                    ->getQuery()
+                    ->getResult();            
+        }
+    }
+    
+    
+    
     /**
      * Retourne les n formations les plus récentes
      * @param type $nb

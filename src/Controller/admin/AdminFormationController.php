@@ -9,6 +9,7 @@ use App\Repository\FormationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Formation;
 use App\Form\FormationType;
+use App\Repository\NiveauRepository;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -37,13 +38,21 @@ class AdminFormationController extends AbstractController{
     private $repository;
 
     /**
+     *
+     * @var NiveauRepository
+     */
+    private $repositoryNiveau;
+    
+    
+    /**
      * 
      * @param FormationRepository $repository
      * @param EntityManagerInterface $om
      */
-    function __construct(FormationRepository $repository, EntityManagerInterface $om) {
+    function __construct(FormationRepository $repository, EntityManagerInterface $om, NiveauRepository $repositoryNiveau) {
         $this->repository = $repository;
         $this->om = $om;
+        $this->repositoryNiveau = $repositoryNiveau;
     }
 
     /**
@@ -52,8 +61,10 @@ class AdminFormationController extends AbstractController{
      */
     public function index(): Response{
         $formations = $this->repository->findAll();
+        $niveaux = $this->repositoryNiveau->findAll();
         return $this->render(self::PAGEFORMATIONS, [
-            'formations' => $formations
+            'formations' => $formations,
+            'niveaux' => $niveaux
         ]);
     }
     
@@ -65,8 +76,10 @@ class AdminFormationController extends AbstractController{
      */
     public function sort($champ, $ordre): Response{
         $formations = $this->repository->findAllOrderBy($champ, $ordre);
+        $niveaux = $this->repositoryNiveau->findAll();
         return $this->render(self::PAGEFORMATIONS, [
-           'formations' => $formations
+           'formations' => $formations,
+           'niveaux' => $niveaux
         ]);
     }   
     
@@ -80,8 +93,29 @@ class AdminFormationController extends AbstractController{
         if($this->isCsrfTokenValid('filtre_'.$champ, $request->get('_token'))){
             $valeur = $request->get("recherche");
             $formations = $this->repository->findByContainValue($champ, $valeur);
+            $niveaux = $this->repositoryNiveau->findAll();
             return $this->render(self::PAGEFORMATIONS, [
-                'formations' => $formations
+                'formations' => $formations,
+                'niveaux' => $niveaux
+            ]);
+        }
+        return $this->redirectToRoute("admin.formations");
+    }
+    
+        /**
+     * @Route("/admin/niveau/{champ}", name="admin.findByNiveau")
+     * @param type $champ
+     * @param Request $request
+     * @return Response
+     */
+    public function findByNiveau($champ, Request $request): Response{
+        if($this->isCsrfTokenValid('filtre_'.$champ, $request->get('_token'))){
+            $valeur = $request->get("rechercheNiveau");
+            $formations = $this->repository->findNiveauByContainValue($champ, $valeur);
+            $niveaux = $this->repositoryNiveau->findAll();
+            return $this->render(self::PAGEFORMATIONS, [
+                'formations' => $formations,
+                'niveaux' => $niveaux
             ]);
         }
         return $this->redirectToRoute("formations");

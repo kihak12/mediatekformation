@@ -54,6 +54,11 @@ class Formation
      * @ORM\JoinColumn(nullable=false)
      */
     private $niveau;
+    
+    /**
+     * @ORM\Column(type="integer", length=11, nullable=false)
+     */
+    private $niveau_id;
 
     public function getId(): ?int
     {
@@ -146,5 +151,10 @@ class Formation
         $this->niveau = $niveau;
 
         return $this;
+    }
+    
+        public function getNiveauId(): ?string
+    {
+        return $this->niveau_id;
     }
 }

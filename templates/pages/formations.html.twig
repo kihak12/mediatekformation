@@ -17,6 +17,17 @@
                 </th>
                 <th class="text-center align-top" scope="col">
                     Niveau<br>
+                    <form class="form-inline mt-1" method="POST" action="{{ path('formations.findByNiveau', {champ:'niveau_id'}) }}">
+                        <div class="form-group mr-1 mb-2">
+                            <select name="rechercheNiveau" id="list">
+                                {% for niveau in niveaux %}
+                                    <option value="{{ niveau.id }}">{{ niveau.difficulter }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="hidden" name="_token" value="{{ csrf_token('filtre_niveau_id') }}">
+                        <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
+                    </form>
                 </th>
                 <th class="text-center align-top" scope="col">
                     Date<br>
