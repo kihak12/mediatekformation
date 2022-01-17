@@ -13,7 +13,7 @@
         <thead>
             <tr>
                 <th class="text-left align-top" scope="col">
-                    titre
+                    Titre
                     <a href="{{ path('admin.sort', {champ:'title', ordre:'DESC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true"><</a>
                     <a href="{{ path('admin.sort', {champ:'title', ordre:'ASC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true">></a>
                     <form class="form-inline mt-1" method="POST" action="{{ path('admin.findallcontain', {champ:'title'}) }}">
@@ -23,6 +23,9 @@
                         <input type="hidden" name="_token" value="{{ csrf_token('filtre_title') }}">
                         <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
                     </form>
+                </th>
+                <th class="text-center align-top" scope="col">
+                    Niveau<br>
                 </th>
                 <th class="text-center align-top" scope="col">
                     Date<br>
@@ -41,6 +44,9 @@
                         <h5 class="text-info">
                             {{ formation.title }}
                         </h5>
+                    </td>
+                    <td class="text-center">
+                        {{ formation.niveau.difficulter }}
                     </td>
                     <td class="text-center">
                         {{ formation.publishedatstring }}

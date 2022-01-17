@@ -3,10 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Formation;
+use App\Entity\Niveau;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class FormationType extends AbstractType
 {
@@ -30,6 +32,12 @@ class FormationType extends AbstractType
             ])
             ->add('videoId', null, [
                 'label' => 'Id de la video Youtube'
+            ])
+            ->add('niveau', EntityType::class, [
+                'class' => Niveau::class,
+                'choice_label' => 'difficulter',
+                'multiple' => false,
+                'required' => true
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregister'
