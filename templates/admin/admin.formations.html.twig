@@ -1,82 +1,89 @@
 {% extends "baseadmin.html.twig" %}
 {% block body %}
-    <div class="mt-3">
-        <h2 class="text-center">Gestion des formations</h2>
-        <p class="text-right">
-            <a href="{{ path('admin.formation.ajout') }}" class="btn btn-primary">
-                Ajouter une formation
-            </a>
-        </p>
-    </div>
     
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th class="text-left align-top" scope="col">
-                    Titre
-                    <a href="{{ path('admin.sort', {champ:'title', ordre:'DESC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true"><</a>
-                    <a href="{{ path('admin.sort', {champ:'title', ordre:'ASC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true">></a>
-                    <form class="form-inline mt-1" method="POST" action="{{ path('admin.findallcontain', {champ:'title'}) }}">
-                        <div class="form-group mr-1 mb-2">
-                            <input type="text" class="sm" name="recherche">
-                        </div>
-                        <input type="hidden" name="_token" value="{{ csrf_token('filtre_title') }}">
-                        <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
-                    </form>
-                </th>
-                <th class="text-center align-top" scope="col">
-                    Niveau<br>
-                    <form class="form-inline mt-1" method="POST" action="{{ path('admin.findByNiveau', {champ:'niveau_id'}) }}">
-                        <div class="form-group mr-1 mb-2">
-                            <select name="rechercheNiveau" id="list">
-                                {% for niveau in niveaux %}
-                                    <option value="{{ niveau.id }}">{{ niveau.difficulter }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <input type="hidden" name="_token" value="{{ csrf_token('filtre_niveau_id') }}">
-                        <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
-                    </form>
-                </th>
-                <th class="text-center align-top" scope="col">
-                    Date<br>
-                    <a href="{{ path('admin.sort', {champ:'publishedAt', ordre:'DESC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true"><</a>
-                    <a href="{{ path('admin.sort', {champ:'publishedAt', ordre:'ASC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true">></a>
-                 </th>
-                <th class="text-center align-top" scope="col">
-                    &nbsp;
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for formation in formations %}
+    {% if app.user %}
+        <div class="mt-3">
+            <h2 class="text-center">Gestion des formations</h2>
+            <p class="text-right">
+                <a href="{{ path('admin.formation.ajout') }}" class="btn btn-primary">
+                    Ajouter une formation
+                </a>
+            </p>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        <h5 class="text-info">
-                            {{ formation.title }}
-                        </h5>
-                    </td>
-                    <td class="text-center">
-                        {{ formation.niveau.difficulter }}
-                    </td>
-                    <td class="text-center">
-                        {{ formation.publishedatstring }}
-                    </td>
-                    <td class="text-center">
-                        {% if formation.miniature %}
-                            <a href="{{ path('formations.showone', {id:formation.id}) }}">
-                                <img src="{{ formation.miniature }}">
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ path('admin.formations.edit', {id:formation.id}) }}" class="btn btn-secondary">Editer</a>
-                    </td>
-                    <td>
-                        <a onclick="return confirm('Etes-vous sûr de vouloir supprimer la formation {{formation.title}} ?')" href="{{ path('admin.formations.suppr', {id:formation.id}) }}" class="btn btn-danger">Supprimer</a>
-                    </td>
+                    <th class="text-left align-top" scope="col">
+                        Titre
+                        <a href="{{ path('admin.sort', {champ:'title', ordre:'DESC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true"><</a>
+                        <a href="{{ path('admin.sort', {champ:'title', ordre:'ASC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true">></a>
+                        <form class="form-inline mt-1" method="POST" action="{{ path('admin.findallcontain', {champ:'title'}) }}">
+                            <div class="form-group mr-1 mb-2">
+                                <input type="text" class="sm" name="recherche">
+                            </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token('filtre_title') }}">
+                            <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
+                        </form>
+                    </th>
+                    <th class="text-center align-top" scope="col">
+                        Niveau<br>
+                        <form class="form-inline mt-1" method="POST" action="{{ path('admin.findByNiveau', {champ:'niveau_id'}) }}">
+                            <div class="form-group mr-1 mb-2">
+                                <select name="rechercheNiveau" id="list">
+                                    {% for niveau in niveaux %}
+                                        <option value="{{ niveau.id }}">{{ niveau.difficulter }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token('filtre_niveau_id') }}">
+                            <button type="submit" class="btn btn-info mb-2 btn-sm">filtrer</button>
+                        </form>
+                    </th>
+                    <th class="text-center align-top" scope="col">
+                        Date<br>
+                        <a href="{{ path('admin.sort', {champ:'publishedAt', ordre:'DESC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true"><</a>
+                        <a href="{{ path('admin.sort', {champ:'publishedAt', ordre:'ASC'}) }}" class="btn btn-info btn-sm active" role="button" aria-pressed="true">></a>
+                     </th>
+                    <th class="text-center align-top" scope="col">
+                        &nbsp;
+                    </th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for formation in formations %}
+                    <tr>
+                        <td>
+                            <h5 class="text-info">
+                                {{ formation.title }}
+                            </h5>
+                        </td>
+                        <td class="text-center">
+                            {{ formation.niveau.difficulter }}
+                        </td>
+                        <td class="text-center">
+                            {{ formation.publishedatstring }}
+                        </td>
+                        <td class="text-center">
+                            {% if formation.miniature %}
+                                <a href="{{ path('formations.showone', {id:formation.id}) }}">
+                                    <img src="{{ formation.miniature }}">
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('admin.formations.edit', {id:formation.id}) }}" class="btn btn-secondary">Editer</a>
+                        </td>
+                        <td>
+                            <a onclick="return confirm('Etes-vous sûr de vouloir supprimer la formation {{formation.title}} ?')" href="{{ path('admin.formations.suppr', {id:formation.id}) }}" class="btn btn-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="mt-3">
+            <h2 class="text-center">Vous devez être connecté pour accéder au contenu de cette page</h2>
+        </div>
+    {% endif %}
 {% endblock %}

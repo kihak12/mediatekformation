@@ -3,28 +3,52 @@
 {% block title %}{% endblock %}
 {% block stylesheets %}{% endblock %}
 {% block top %}
-    <div class="container">
-        <!-- titre -->
-        <div class="text-left">
-            <img src="{{ app.request.getBasePath()~'/banniere.jpg' }}" >
-        </div>
-        <!-- menu -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('admin.formations') }}">Formations</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('admin.niveaux') }}">Niveaux</a>
-                    </li>                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('accueil') }}">Accueil</a>
-                    </li>
-                </ul>
+    
+    {% if app.user %}
+        <div class="container">
+            <!-- titre -->
+            <div class="text-left">
+                <img src="{{ app.request.getBasePath()~'/banniere.jpg' }}" >
             </div>
-        </nav>        
-    </div>
+            <!-- menu -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">  
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin.formations') }}">Gestions des formations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin.niveaux') }}">Gestions des niveaux</a>
+                        </li>                
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('formations') }}">Acceuil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>        
+        </div>
+    {% else %}
+        <div class="container">
+            <!-- titre -->
+            <div class="text-left">
+                <img src="{{ app.request.getBasePath()~'/banniere.jpg' }}" >
+            </div>
+            <!-- menu -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">  
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>        
+        </div>
+    {% endif %}
+
 {% endblock %}
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}

@@ -1,34 +1,40 @@
 {% extends "baseadmin.html.twig" %}
 
 {% block body %}
-    <form class="form-inline mt-1" method="POST" action="{{ path('admin.niveauN.ajout') }}">
-        <div class="form-group mr-1 mb-2">
-            <input type="text" class="sm" name="nom">
-        </div>
-        <button type="submit" class="btn btn-primary mb-2 btn-sm">Ajouter</button>
-    </form>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    Difficulter
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for niveau in niveaux %}
+    {% if app.user %}
+        <form class="form-inline mt-1" method="POST" action="{{ path('admin.niveauN.ajout') }}">
+            <div class="form-group mr-1 mb-2">
+                <input type="text" class="sm" name="nom">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2 btn-sm">Ajouter</button>
+        </form>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        {{ niveau.difficulter }}
-                    </td>
-                    <td>
-                        <a onclick="return confirm('Etes-vous sûr de vouloir supprimer la difficulter ?')" href="{{ path('admin.niveau.suppr', {id:niveau.id}) }}" class="btn btn-danger">Supprimer</a>
-                    </td>
+                    <th>
+                        Difficulter
+                    </th>
+                    <th>
+                        Action
+                    </th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for niveau in niveaux %}
+                    <tr>
+                        <td>
+                            {{ niveau.difficulter }}
+                        </td>
+                        <td>
+                            <a onclick="return confirm('Etes-vous sûr de vouloir supprimer la difficulter ?')" href="{{ path('admin.niveau.suppr', {id:niveau.id}) }}" class="btn btn-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="mt-3">
+            <h2 class="text-center">Vous devez être connecté pour accéder au contenu de cette page</h2>
+        </div>
+    {% endif %}
 {% endblock %}
